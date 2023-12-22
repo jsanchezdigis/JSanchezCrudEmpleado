@@ -1,0 +1,75 @@
+﻿@model ML.Empleado
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Empleados</h2>
+        <p>Agregar, Eliminar, Modificar los Empleados</p>
+    </div>
+    <hr />
+    <div class="row">
+        <div style="float:right">
+            @using (Html.BeginForm("GetAll", "Empleado", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <label>
+                    <input type="radio" name="empleado.Estatus" value="1" /> Activos
+                </label>
+                <label>
+                    <input type="radio" name="empleado.Estatus" value="0" /> Inactivos
+                </label>
+                <input type="submit" value="Filtrar" class="btn btn-success" />
+            }
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+        @if (Model.Empleados != null)
+        {
+            <table class="table table-bordered table-responsive table-hover">
+            <thead>
+                <tr>
+                    <td class="text-center" style=" font-weight:bold;">Editar</td>
+                    
+                    <td style="display: none;">IdEmpleado</td>
+                    <td class="text-center" style=" font-weight:bold;">Nombre</td>
+                    <td class="text-center" style=" font-weight:bold;">Apellido Paterno</td>
+                    <td class="text-center" style=" font-weight:bold;">Apellido Materno</td>
+                    <td class="text-center" style=" font-weight:bold;">Estatus</td>
+                    
+                    <td class="text-center" style=" font-weight:bold;">Eliminar</td>
+                </tr>
+            </thead>
+            
+            <tbody>
+                @foreach (ML.Empleado empleado in Model.Empleados)
+                {
+                    <tr>
+                        
+                        <td class="text-center"><a class="btn btn-warning" href="@Url.Action("Form", "Empleado", new { IdEmpleado = empleado.IdEmpleado })"></a></td>
+                        
+                        <td style="display: none;">@empleado.IdEmpleado</td>
+                        <td>@empleado.Nombre</td>
+                        <td>@empleado.ApellidoPaterno</td>
+                        <td>@empleado.ApellidoMaterno</td>
+                        @if (empleado.Estatus == 1)
+                        {
+                            <td>Activo</td>
+                        }
+                        else
+                        {
+                            <td>Inactivo</td>
+                        }
+                        
+                        <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Empleado", new { IdEmpleado = empleado.IdEmpleado })" onclick="return confirm('Estas seguro que deseas inactivar este registro?');"></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>
+
